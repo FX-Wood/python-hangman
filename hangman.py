@@ -1,14 +1,13 @@
 import random
 
 # make a list of words to play
-words = ['buxom', 'haft', 'barbarian', 'plush', 'gambit']
-
+# words = ['buxom', 'haft', 'barbarian', 'plush', 'gambit']
+words = ['boo']
 # choose a word to play with
 secret = words[random.randrange(len(words))]
 
-# initialize a counter for the number of guesses
+# initialize a counter for the number of rounds
 round = 0
-
 
 # initialize an array for correct guesses
 correct = []
@@ -16,11 +15,13 @@ correct = []
 # initialize an array for incorrect guesses
 incorrect = []
 
-# initialize an array to hold the order of the guesses
-
-# make messages for victories and losses
-win = f"You got it! The word was {secret} and you guessed it in {round} rounds. \n Your incorrect guesses: {incorrect}"
-lose = f"You lost! Please try again. \n Your correct guesses: {correct},\n your incorrect guesses: {incorrect}"
+# initialize game state
+state = [
+    char 
+    if char in correct
+    else ' _ ' 
+    for char in secret
+]
 
 # Welcome user to the game
 print('\n'* 20)
@@ -140,24 +141,17 @@ noose["9"] = """
 
 """
 
-# main game loop
+# Main game loop
 while(len(correct) + len(incorrect) < 10):
+    # clear window
     print('\n' * 20)
     # print a macabre hangman
     print(noose[str(round)])
-    # increment the attempt counter
+    # increment round
     round += 1
-    # at the beginning of each round, give game state
-    # round
+    # print round
     print(f"round {round}")
-    # make a state comprehension
-    state = [
-        char 
-        if char in correct
-        else ' _ ' 
-        for char in secret
-    ]
-
+    # print state
     print(f"    {' '.join(state)}   ")
 
     # ask user for input
@@ -169,18 +163,24 @@ while(len(correct) + len(incorrect) < 10):
     else:
         incorrect.append(choice)
         
-    
-    # check win condition
-    if len(correct) == len(secret):
-        break
+    # Compute game state
+    state = [
+        char 
+        if char in correct
+        else ' _ ' 
+        for char in secret
+    ]
 
-    # print game state
-    print('')
+    # check win condition
+    if not ' _ ' in state:
+        break
 
 
 # make messages for victories and losses
-if (len(correct) == len(secret)):
+if not ' _ ' in state:
     # win
+    print(f"    {' '.join(state)}   ")
     print(f"You got it! The word was {secret} and you guessed it in {round} attempts. \n your correct guesses: {correct} \n Your incorrect guesses: {incorrect}")
 else:
+    print(f"    {' '.join(state)}   ")
     print(f"You lost! Please try again. \n Your correct guesses: {correct},\n your incorrect guesses: {incorrect}")
